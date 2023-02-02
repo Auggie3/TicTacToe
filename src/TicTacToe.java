@@ -1,10 +1,16 @@
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Scanner;
 
 public class TicTacToe <X extends Player,O extends Player>{
-    Character[][] matrix;
-    int freeSpaces;
+    private Character[][] matrix;
+    private int freeSpaces;
     private X playerOne;
     private O playerTwo;
+
+
+
+
     public TicTacToe(X playerOne, O playerTwo){
         matrix = new Character[][] {{'-', '-', '-'}, {'-', '-', '-'}, {'-', '-', '-'}};
         freeSpaces = 9;
@@ -14,6 +20,10 @@ public class TicTacToe <X extends Player,O extends Player>{
     }
 
     public void play(){
+        if(playerOne.getSymbol().equals(playerTwo.getSymbol())){
+            System.out.println("Players have to choose different symbols from eacheother!!!");
+            return;
+        }
 
         boolean stillPlaying = true;
         Player nowPlaying = playerOne;
@@ -23,15 +33,16 @@ public class TicTacToe <X extends Player,O extends Player>{
             Coordinates inputCoordinates = nowPlaying.makeMove(matrix);
             freeSpaces--;
             matrix[inputCoordinates.getX()][inputCoordinates.getY()] = nowPlaying.getSymbol();
-            Character end = checkForWinnerAndEnd();
+            Character end = checkForWinnerAndEnd(matrix,freeSpaces);
 
             stillPlaying = false;
             switch (end){
-                case 'o':
-                case 'x':
+                case 'w':
+                    System.out.println();
                     System.out.println("Winner: " + nowPlaying.getName() + "!!!");
                     break;
-                case 'n':
+                case 'd':
+                    System.out.println();
                     System.out.println("DRAW!!!");
                     break;
                 default:
@@ -56,40 +67,26 @@ public class TicTacToe <X extends Player,O extends Player>{
         }
     }
 
-    private Character checkForWinnerAndEnd(){
+    public static Character checkForWinnerAndEnd(Character[][] matrix, int freeSpaces){
         //ako nije zavrseno vraca -
         //ako je nerijeseno vraca n
+        
 
         if(
-                (matrix[0][0]=='o' && matrix[0][1]=='o' && matrix[0][2]=='o') ||
-                (matrix[0][2]=='o' && matrix[1][2]=='o' && matrix[2][2]=='o') ||
-                (matrix[2][2]=='o' && matrix[2][1]=='o' && matrix[2][0]=='o') ||
-                (matrix[2][0]=='o' && matrix[1][0]=='o' && matrix[0][0]=='o') ||
-                (matrix[2][0]=='o' && matrix[1][1]=='o' && matrix[0][2]=='o') ||
-                (matrix[0][0]=='o' && matrix[1][1]=='o' && matrix[2][2]=='o') ||
-                (matrix[1][0]=='o' && matrix[1][1]=='o' && matrix[1][2]=='o') ||
-                (matrix[0][1]=='o' && matrix[1][1]=='o' && matrix[2][1]=='o')
-
-
-        ){
-            return 'o';
-        }
-
-        if(
-                (matrix[0][0]=='x' && matrix[0][1]=='x' && matrix[0][2]=='x') ||
-                (matrix[0][2]=='x' && matrix[1][2]=='x' && matrix[2][2]=='x') ||
-                (matrix[2][2]=='x' && matrix[2][1]=='x' && matrix[2][0]=='x') ||
-                (matrix[2][0]=='x' && matrix[1][0]=='x' && matrix[0][0]=='x') ||
-                (matrix[2][0]=='x' && matrix[1][1]=='x' && matrix[0][2]=='x') ||
-                (matrix[0][0]=='x' && matrix[1][1]=='x' && matrix[2][2]=='x') ||
-                (matrix[1][0]=='x' && matrix[1][1]=='x' && matrix[1][2]=='x') ||
-                (matrix[0][1]=='x' && matrix[1][1]=='x' && matrix[2][1]=='x')
+                (matrix[0][0]!= '-' && matrix[0][0] == matrix[0][1] && matrix[0][0] == matrix[0][2]) ||
+                (matrix[0][2]!= '-' && matrix[0][2] == matrix[1][2] && matrix[0][2] == matrix[2][2]) ||
+                (matrix[2][2]!= '-' && matrix[2][2] == matrix[2][1] && matrix[2][2] == matrix[2][0]) ||
+                (matrix[2][0]!= '-' && matrix[2][0] == matrix[1][0] && matrix[2][0] == matrix[0][0]) ||
+                (matrix[2][0]!= '-' && matrix[2][0] == matrix[1][1] && matrix[2][0] == matrix[0][2]) ||
+                (matrix[0][0]!= '-' && matrix[0][0] == matrix[1][1] && matrix[0][0] == matrix[2][2]) ||
+                (matrix[1][0]!= '-' && matrix[1][0] == matrix[1][1] && matrix[1][0] == matrix[1][2]) ||
+                (matrix[0][1]!= '-' && matrix[0][1] == matrix[1][1] && matrix[0][1] == matrix[2][1])
 
         ){
-            return 'x';
+            return 'w';
         }
 
-        if(freeSpaces==0) return 'n';
+        if(freeSpaces==0) return 'd';
 
         return '-';
     }
@@ -99,12 +96,17 @@ public class TicTacToe <X extends Player,O extends Player>{
     // 2,0 2,1 2,2
 
     private void printBoard(){
-        for (int i = 0; i < matrix.length; i++){
-            for (int j = 0; j< matrix[i].length; j++){
-                System.out.print(matrix[i][j]+" ");
-            }
-            System.out.println();
-        }
+        System.out.println();
+        System.out.println("  1 2 3");
+        System.out.println("A " + matrix[0][0]  + "|" + matrix[0][1] + "|"
+                + matrix[0][2]);
+        System.out.println("  -----");
+        System.out.println("B " + matrix[1][0] + "|" + matrix[1][1] + "|"
+                + matrix[1][2]);
+        System.out.println("  -----");
+        System.out.println("C " + matrix[2][0] + "|" + matrix[2][1] + "|"
+                + matrix[2][2]);
+        System.out.println();
     }
 
     private void cleanBoard(){
