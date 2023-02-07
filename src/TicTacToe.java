@@ -25,6 +25,11 @@ public class TicTacToe <X extends Player,O extends Player>{
             return;
         }
 
+        if(playerOne.getSymbol().equals('-') || playerTwo.getSymbol().equals('-')){
+            System.out.println("Playing symbol cant be '-' !!!");
+            return;
+        }
+
         boolean stillPlaying = true;
         Player nowPlaying = playerOne;
         while(stillPlaying){
