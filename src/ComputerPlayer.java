@@ -24,8 +24,15 @@ public class ComputerPlayer extends AbstractPlayer{
             }
         }
 
+
         Random random = new Random();
-        int randomValue = random.nextInt(positionList.size());
+        int randomValue = 0;
+        try{
+            randomValue = random.nextInt(positionList.size());
+        }catch (Exception e){
+            return null;
+        }
+
         return positionList.get(randomValue);
     }
 
