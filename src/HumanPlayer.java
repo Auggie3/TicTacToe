@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class HumanPlayer extends AbstractPlayer{
@@ -7,23 +8,14 @@ public class HumanPlayer extends AbstractPlayer{
     static {
         allowedFields = new HashMap<>();
         allowedFields.put("A1",new Coordinates(0,0));
-        allowedFields.put("a1",new Coordinates(0,0));
         allowedFields.put("A2",new Coordinates(0,1));
-        allowedFields.put("a2",new Coordinates(0,1));
         allowedFields.put("A3",new Coordinates(0,2));
-        allowedFields.put("a3",new Coordinates(0,2));
         allowedFields.put("B1",new Coordinates(1,0));
-        allowedFields.put("b1",new Coordinates(1,0));
         allowedFields.put("B2",new Coordinates(1,1));
-        allowedFields.put("b2",new Coordinates(1,1));
         allowedFields.put("B3",new Coordinates(1,2));
-        allowedFields.put("b3",new Coordinates(1,2));
         allowedFields.put("C1",new Coordinates(2,0));
-        allowedFields.put("c1",new Coordinates(2,0));
         allowedFields.put("C2",new Coordinates(2,1));
-        allowedFields.put("c2",new Coordinates(2,1));
         allowedFields.put("C3",new Coordinates(2,2));
-        allowedFields.put("c3",new Coordinates(2,2));
 
     }
 
@@ -50,6 +42,7 @@ public class HumanPlayer extends AbstractPlayer{
             System.out.println("Field: (ex. A1, a1)");
             try{
                 field = input.next();
+                field = field.toUpperCase(Locale.ROOT);
                 Coordinates temp = allowedFields.get(field);
                 if(temp == null){
                     System.out.println("Invalid field!!!");
