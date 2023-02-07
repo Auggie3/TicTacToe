@@ -49,7 +49,6 @@ public class ComputerExpertPlayer extends ComputerPlayer{
         corners.add(new Coordinates(2,2));
     }
 
-    private Character enemySymbol;
 
 
     public ComputerExpertPlayer(String name, Character symbol) {
@@ -58,7 +57,6 @@ public class ComputerExpertPlayer extends ComputerPlayer{
 
     @Override
     public Coordinates makeMove(Character[][] matrix) {
-        enemySymbol = getEnemySymbol(matrix);
         return nextMove(matrix);
     }
 
@@ -73,7 +71,7 @@ public class ComputerExpertPlayer extends ComputerPlayer{
         for (Line l:
              allLines) {
 
-            if(inLine(matrix,l,symbol)==2 && inLine(matrix,l,enemySymbol)==0){
+            if(inLine(matrix,l)==2 && enemyInLine(matrix,l)==0){
                 for (Coordinates c: l.positions){
                     int i = c.getX();
                     int j = c.getY();
@@ -86,7 +84,7 @@ public class ComputerExpertPlayer extends ComputerPlayer{
         for (Line l:
              allLines) {
 
-            if(inLine(matrix,l,symbol)==0 && inLine(matrix,l,enemySymbol)==2){
+            if(inLine(matrix,l)==0 && enemyInLine(matrix,l)==2){
                 for (Coordinates c: l.positions){
                     int i = c.getX();
                     int j = c.getY();
@@ -96,19 +94,30 @@ public class ComputerExpertPlayer extends ComputerPlayer{
 
         }
 
-        if(matrix[1][1]=='-' && inCorners(matrix, enemySymbol)>0){
+        if(matrix[1][1]=='-' && enemyInCorners(matrix)>0){
             return  new Coordinates(1,1);
         }
 
         return super.makeMove(matrix);
     }
 
-    private int inCorners(Character[][] matrix,Character s){
+    private int inCorners(Character[][] matrix){
         int temp=0;
         for(Coordinates c: corners){
             int i = c.getX();
             int j = c.getY();
-            if(matrix[i][j] == s) temp++;
+            if(matrix[i][j] == symbol) temp++;
+        }
+
+        return temp;
+    }
+
+    private int enemyInCorners(Character[][] matrix){
+        int temp=0;
+        for(Coordinates c: corners){
+            int i = c.getX();
+            int j = c.getY();
+            if(matrix[i][j]!=symbol && matrix[i][j]!='-') temp++;
         }
 
         return temp;
@@ -116,12 +125,23 @@ public class ComputerExpertPlayer extends ComputerPlayer{
 
 
 
-    private int inLine(Character[][] matrix, Line l, Character s){
+    private int inLine(Character[][] matrix, Line l){
         int temp=0;
         for(Coordinates c: l.positions){
             int i = c.getX();
             int j = c.getY();
-            if(matrix[i][j]==s) temp++;
+            if(matrix[i][j]==symbol) temp++;
+        }
+
+        return temp;
+    }
+
+    private int enemyInLine(Character[][] matrix, Line l){
+        int temp=0;
+        for(Coordinates c: l.positions){
+            int i = c.getX();
+            int j = c.getY();
+            if(matrix[i][j]!=symbol && matrix[i][j]!='-') temp++;
         }
 
         return temp;
@@ -138,17 +158,5 @@ public class ComputerExpertPlayer extends ComputerPlayer{
 
         return free;
     }
-
-    private Character getEnemySymbol(Character[][] matrix){
-        for(int i = 0; i < matrix.length; i++){
-            for (int j=0; j<matrix[i].length; j++){
-                Character c = matrix[i][j];
-                if(c!='-' && c!=symbol) return c;
-            }
-        }
-
-        return symbol=='x'?'o':'x';
-    }
-
 
 }
